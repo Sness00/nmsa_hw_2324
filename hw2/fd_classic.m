@@ -16,7 +16,9 @@
 %   Upwind
 
 
-clear; close all
+clc
+clear
+close all
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Parameters
@@ -55,7 +57,7 @@ T = 0.5;
 I = [0 1];
 
 % Number of time steps
-NT = 2000;
+NT = 4000;
 % Number of space steps
 NX = 1000;
 
@@ -72,7 +74,7 @@ NX = 1000;
 % disp('Please wait ...');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-flag = 4;
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 dt = T/NT;
@@ -98,7 +100,7 @@ for j = 1 : NX+1
 
 end
 
-
+flag = 4;
 for n = 1:NT
     for j = 2:NX
         
@@ -159,8 +161,10 @@ L2ux_ERR   = norm(SOLux_EX-SOL_u(NX+2:end,n+1),2)*dx^0.5;
 L1ux_ERR   = norm(SOLux_EX-SOL_u(NX+2:end,n+1),1)*dx;
 LINFux_ERR = norm(SOLux_EX-SOL_u(NX+2:end,n+1),Inf);
 
-Err_t = [L2ut_ERR, L1ut_ERR, LINFut_ERR]
-Err_x = [L2ux_ERR, L1ux_ERR, LINFux_ERR]
+Err_t = [L2ut_ERR, L1ut_ERR, LINFut_ERR];
+disp({'Err_t = ', Err_t})
+Err_x = [L2ux_ERR, L1ux_ERR, LINFux_ERR];
+disp({'Err_x = ', Err_x})
 
 
 % Visualization
