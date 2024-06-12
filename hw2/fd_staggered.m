@@ -1,4 +1,4 @@
-clearvars; close all; clc;
+clear; close all; clc;
 
 % Solution of the problem:
 %  rho v_t = sigma_x  in (0,L) x (0,T)
