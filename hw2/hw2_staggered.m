@@ -100,6 +100,7 @@ for k = 1:Nt
 end
 [xxp, ttp] = meshgrid(x_p, t_p);
 [xxu, ttu] = meshgrid(x_u, t_u);
+
 %% Errors
 
 L2_err_p = norm(p_exc(end, :) - p(end, :), 2)*dx^0.5;
@@ -117,6 +118,7 @@ disp('Discretization errors for velocity: ')
 disp([L2_err_u L1_err_u Linf_err_u])
 
 %% Graphs
+
 figure
 sgtitle('Velocity')
 subplot(1, 2, 1)

@@ -69,19 +69,35 @@ for k = 2:Nt
     phi(k+1, Nx+1) = phi(k, Nx+1);
 end
 
-[xx, tt] = meshgrid(x, t);
-figure
-surf(xx, tt, phi, 'EdgeAlpha', 0)
-view(2)
+phi_exc = zeros(size(phi));
+for k = 1:Nt+1
+    for j = 1:Nx+1
+        phi_exc(k, j) = phi_ex(x(j), t(k));
+    end
+end
 
-figure
-plot(x, phi_ex(x, T))
-hold on
-plot(x, phi(end, :))
-
-L2_err = norm(phi_ex(x, T) - phi(Nt+1, :), 2)*dx^0.5;
-L1_err = norm(phi_ex(x, T) - phi(Nt+1, :), 1)*dx;
-Linf_err = norm(phi_ex(x, T) - phi(Nt+1, :), Inf);
+%% Errors
+L2_err = norm(phi_exc(end, :) - phi(Nt+1, :), 2)*dx^0.5;
+L1_err = norm(phi_exc(end, :) - phi(Nt+1, :), 1)*dx;
+Linf_err = norm(phi_exc(end, :) - phi(Nt+1, :), Inf);
 
 disp('Discretization errors: ')
 disp([L2_err L1_err Linf_err])
+
+%% Graphs
+[xx, tt] = meshgrid(x, t);
+figure
+subplot(1, 2, 1)
+surf(xx, tt, phi, 'EdgeAlpha', 0)
+view(2)
+title('Computed')
+subplot(1, 2, 2)
+surf(xx, tt, phi_exc, 'EdgeAlpha', 0)
+view(2)
+title('Exact')
+
+figure
+plot(x, phi(end, :))
+hold on
+plot(x, phi_exc(end, :))
+legend('Computed', 'Exact')
