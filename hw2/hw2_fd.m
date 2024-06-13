@@ -38,8 +38,8 @@ f = @(x, t) gamma^2*S_x(x)*pi/2.*sin(pi*(x/2+1)).*sin(3*pi*t) - ...
 D = [0, L];
 T = 2;
 
-Nt = 2000;
-Nx = 1000;
+Nt = 200;
+Nx = 100;
 
 dt = T/Nt;
 dx = (D(2) - D(1))/Nx;
