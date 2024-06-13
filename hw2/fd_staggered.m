@@ -28,7 +28,7 @@ T = 2;              % Total simulation time
 mu = 4;             %
 rho = 1;
 dx = 0.01;          % Spatial step size
-dt = 0.001;         % Temporal step size
+dt = 0.0025;         % Temporal step size
 
 % Discretization
 xv = 0 : dx/2 : L;    % Spatial grid
