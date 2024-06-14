@@ -52,7 +52,7 @@ p(1, end) = 0;
 
 for k = 2:Nt
     for j = 1:Nx
-        u(k, j) = -gamma*S(x_u(j))*dt/dx*(p(k-1, j+1)-p(k-1, j)) + u(k-1, j);
+        u(k, j) = -gamma*S(x_p(j))*dt/dx*(p(k-1, j+1)-p(k-1, j)) + u(k-1, j);
     end
     % B.C. (x = 0)
     p(k, 1) = -gamma*dt/dx*(u(k, 1) - u_b(t_u(k)))/S(x_p(1)) + dt/gamma*f(x_p(1), t_u(k))/S(x_p(1)) + p(k-1, 1);
@@ -78,6 +78,8 @@ freq = 0:fs/N:fs*(1-1/N);
 [xxp, ttp] = meshgrid(x_p, t_p);
 [xxu, ttu] = meshgrid(x_u, t_u);
 
+P_out = 20*log10(abs(fft(p(:, 1), N)));
+
 %% Graphs
 
 figure
@@ -94,3 +96,6 @@ title('Velocity')
 figure
 plot(freq(1:N/2), 20*log10(frf(1:N/2)/max(frf)))
 ylim([-350 10])
+
+figure
+plot(freq(1:N/2), P_out(1:N/2))

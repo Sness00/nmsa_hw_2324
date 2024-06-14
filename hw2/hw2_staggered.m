@@ -71,7 +71,7 @@ p(1, end) = 0;
 
 for k = 2:Nt
     for j = 1:Nx
-        u(k, j) = -gamma*S(x_u(j))*dt/dx*(p(k-1, j+1)-p(k-1, j)) + u(k-1, j);
+        u(k, j) = -gamma*S(x_p(j))*dt/dx*(p(k-1, j+1)-p(k-1, j)) + u(k-1, j);
     end
     % B.C. (x = 0)
     p(k, 1) = -gamma*dt/dx*u(k, 1)/S(x_p(1)) + dt/gamma*f(x_p(1), t_u(k))/S(x_p(1)) + p(k-1, 1);
