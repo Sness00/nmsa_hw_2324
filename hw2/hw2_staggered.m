@@ -142,7 +142,7 @@ view(2)
 title('Exact')
 
 figure
-sgtitle('Pressure and Velocity at t=T')
+sgtitle('Pressure and Velocity at t = T')
 subplot(2, 1, 1)
 plot(x_p, p(end, :))
 hold on

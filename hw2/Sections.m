@@ -12,4 +12,3 @@ subplot(2,1,1); plot(S2(:,1), S2(:,2),'k', S2(:,1), -S2(:,2),'k')
 title('Vocal Tract Profile'); xlabel('x'); ylabel('sqrt(S)');
 subplot(2,1,2); plot(S1(:,1), S1(:,2),'k', S1(:,1), -S1(:,2),'k')
 title('Vocal Tract Profile'); xlabel('x'); ylabel('sqrt(S)');
-
