@@ -12,10 +12,10 @@ S1_x = @(x) 0.*x;
 S2 = @(x) (1 + 2.*x).^2;
 S2_x = @(x) 4*(1 + 2.*x);
 
-cross = input('Which surface? ');
+cross = input('Which section? ');
 while(cross ~= 1 && cross ~= 2)
     clc
-    cross = input('Which surface? ');
+    cross = input('Which section? ');
 end
 if cross == 1
     S = S1;
