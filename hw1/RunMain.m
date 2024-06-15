@@ -28,7 +28,7 @@ Data = DataTest('test');
 % Options
 Data.surf = 0;
 Data.snapshot = 0;
-Data.visual_graph = 1;
+Data.visual_graph = 0;
 Data.calc_errors = 1;
 
 % Main routine

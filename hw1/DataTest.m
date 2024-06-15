@@ -81,20 +81,26 @@ elseif strcmp(TestName, 'Q3c')
 
 elseif strcmp(TestName, 'test')
     Data.name = TestName;
+    
+    % Exact solution
+    Data.uex = @(x, t) sin(2*pi*x).*sin(2*pi*Data.c(x).*t);
+    Data.uex_x = @(x, t) pi*t.*(Data.mu_x(x).*Data.ro(x) - Data.mu(x).*Data.ro_x(x)) ... 
+        ./Data.ro(x).^2./Data.c(x).*sin(2*pi*x).*cos(2*pi*Data.c(x).*t) + ...
+                         2*pi*cos(2*pi*x).*sin(2*pi*Data.c(x).*t);
 
     % Domain
     Data.domain = [0, 1];
     
     % Time
-    Data.T = 1.25;
+    Data.T = 1;
     Data.dt = 0.001;
     
     % Parameters
-    Data.ro = @(x) 1 + 0.*x; 
-    Data.mu = @(x) 1 + 0.*x;
+    Data.ro = @(x) 16 + 7.8.*x; 
+    Data.mu = @(x) 21 + 3.3.*x;
 
-    Data.ro_x = @(x) 0 + 0.*x;
-    Data.mu_x = @(x) 0 + 0.*x;
+    Data.ro_x = @(x) 7.8 + 0.*x;
+    Data.mu_x = @(x) 3.3 + 0.*x;
 
     Data.c = @(x) sqrt(Data.mu(x)./Data.ro(x));    
     
@@ -102,11 +108,7 @@ elseif strcmp(TestName, 'test')
     B = @(x, t) -(pi*t./Data.c(x).*(Data.mu_x(x).*Data.ro(x) - Data.mu(x).*Data.ro_x(x))./Data.ro(x).^2).^2;
     C = @(x, t) -pi*t.*(2./Data.c(x).*Data.ro_x(x).*(Data.mu_x(x).*Data.ro(x) - Data.mu(x).*Data.ro_x(x))./Data.ro(x).^3 + ...
                         Data.c(x)/2.*((Data.mu_x(x).*Data.ro(x) - Data.mu(x).*Data.ro_x(x))./(Data.mu(x).*Data.ro(x))).^2);
-    % Exact solution
-    Data.uex = @(x, t) sin(2*pi*x).*sin(2*pi*Data.c(x).*t);
-    Data.uex_x = @(x, t) pi*t.*(Data.mu_x(x).*Data.ro(x) - Data.mu(x).*Data.ro_x(x))./Data.ro(x).^2./Data.c(x).*sin(2*pi*x).*cos(2*pi*Data.c(x).*t) + ...
-                         2*pi*cos(2*pi*x).*sin(2*pi*Data.c(x).*t);
-
+    
     Data.force = @(x, t) -Data.mu_x(x).*Data.uex_x(x, t) - Data.mu(x).*(A(x, t).*cos(2*pi*x).*cos(2*pi*Data.c(x).*t) + ...
                                                                        B(x, t).*sin(2*pi*x).*sin(2*pi*Data.c(x).*t) + ...
                                                                        C(x, t).*sin(2*pi*x).*cos(2*pi*Data.c(x).*t));
