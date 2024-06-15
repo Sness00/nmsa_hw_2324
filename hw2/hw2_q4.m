@@ -17,7 +17,7 @@ u_b = @(t) 0.5*(sin(pi*(t-0.1)/0.05) + abs(sin(pi*(t-0.1)/0.05)));
 D = [0, L];
 T = 1;
 
-Nt = 2001;
+Nt = 4000;
 Nx = 1000;
 
 dt = T/Nt;
@@ -95,23 +95,29 @@ sgtitle('Pressure and Velocity')
 subplot(1, 2, 1)
 surf(xxp, ttp, p, 'EdgeAlpha', 0)
 view(2)
-title('Pressure')
+title('p(x, t)')
+xlabel('x')
+ylabel('t', 'Rotation', 0)
+colorbar
 subplot(1, 2, 2)
 surf(xxu, ttu, u, 'EdgeAlpha', 0)
 view(2)
-title('Velocity')
+title('u(x, t)')
+xlabel('x')
+ylabel('t', 'Rotation', 0)
+colorbar
 
 figure
-plot(freq(1:N/2), frf_norm_dB)
+plot(freq(1:N/2), frf_norm_dB, 'LineWidth', 1.2)
 ylim([1.1*min(frf_norm_dB) 10])
 title('|FFT\{u_{out}(t)\} / FFT\{u_{in}(t)\}|')
-xlabel('frequency [Hz]')
+xlabel('frequency')
 ylabel('Magnitude [dB]')
 grid on
 
 figure
-plot(freq(1:N/2), P_out(1:N/2))
+plot(freq(1:N/2), P_out(1:N/2), 'LineWidth', 1.2)
 title('|FFT\{p_{out}(t)\}|')
-xlabel('frequency [Hz]')
+xlabel('frequency')
 ylabel('Magnitude [dB]')
 grid on

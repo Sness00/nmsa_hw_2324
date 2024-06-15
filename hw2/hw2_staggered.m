@@ -120,38 +120,58 @@ disp([L2_err_u L1_err_u Linf_err_u])
 %% Graphs
 
 figure
-sgtitle('Velocity')
-subplot(1, 2, 1)
-surf(xxu, ttu, u, 'EdgeAlpha', 0)
-view(2)
-title('Computed')
-subplot(1, 2, 2)
-surf(xxu, ttu, u_exc, 'EdgeAlpha', 0)
-view(2)
-title('Exact')
-
-figure
-sgtitle('Pressure')
+sgtitle('Pressure p(x, t)')
 subplot(1, 2, 1)
 surf(xxp, ttp, p, 'EdgeAlpha', 0)
 view(2)
 title('Computed')
+xlabel('x')
+ylabel('t', 'Rotation', 0)
+colorbar
 subplot(1, 2, 2)
 surf(xxp, ttp, p_exc, 'EdgeAlpha', 0)
 view(2)
 title('Exact')
+xlabel('x')
+ylabel('t', 'Rotation', 0)
+colorbar
+
+figure
+sgtitle('Velocity u(x, t)')
+subplot(1, 2, 1)
+surf(xxu, ttu, u, 'EdgeAlpha', 0)
+view(2)
+title('Computed')
+xlabel('x')
+ylabel('t', 'Rotation', 0)
+colorbar
+subplot(1, 2, 2)
+surf(xxu, ttu, u_exc, 'EdgeAlpha', 0)
+view(2)
+title('Exact')
+xlabel('x')
+ylabel('t', 'Rotation', 0)
+colorbar
+
 
 figure
 sgtitle('Pressure and Velocity at t = T')
 subplot(2, 1, 1)
-plot(x_p, p(end, :))
+plot(x_p, p(end, :), 'LineWidth', 1.2)
 hold on
-plot(x_p, p_exc(end, :))
+plot(x_p, p_exc(end, :), 'LineWidth', 1.2)
 title('Pressure')
-legend('Computed', 'Exact')
+xlabel('x')
+ylabel('p(x)')
+legend('Computed', 'Exact', 'Location', 'southeast')
+grid on
 subplot(2, 1, 2)
-plot(x_u, u(end, :))
+plot(x_u, u(end, :), 'LineWidth', 1.2)
 hold on
-plot(x_u, u_exc(end, :))
+plot(x_u, u_exc(end, :), 'LineWidth', 1.2)
 title('Velocity')
-legend('Computed', 'Exact')
+xlabel('x')
+ylabel('u(x)')
+ylim([1.1*min(u(end, :)) 1.1*max(u(end, :))])
+legend('Computed', 'Exact', 'Location', 'southeast')
+grid on

@@ -13,10 +13,10 @@ S1_x = @(x) 0.*x;
 S2 = @(x) (1 + 2.*x).^2;
 S2_x = @(x) 4*(1 + 2.*x);
 
-cross = input('Which surface? ');
+cross = input('Which section? ');
 while(cross ~= 1 && cross ~= 2)
     clc
-    cross = input('Which surface? ');
+    cross = input('Which section? ');
 end
 if cross == 1
     S = S1;
@@ -38,8 +38,8 @@ f = @(x, t) gamma^2*S_x(x)*pi/2.*sin(pi*(x/2+1)).*sin(3*pi*t) - ...
 D = [0, L];
 T = 2;
 
-Nt = 200;
-Nx = 100;
+Nt = 2000;
+Nx = 1000;
 
 dt = T/Nt;
 dx = (D(2) - D(1))/Nx;
@@ -87,17 +87,28 @@ disp([L2_err L1_err Linf_err])
 %% Graphs
 [xx, tt] = meshgrid(x, t);
 figure
+sgtitle('Acoustic Potential \phi(x, t)')
 subplot(1, 2, 1)
 surf(xx, tt, phi, 'EdgeAlpha', 0)
 view(2)
 title('Computed')
+xlabel('x')
+ylabel('t', 'Rotation', 0)
+colorbar
 subplot(1, 2, 2)
 surf(xx, tt, phi_exc, 'EdgeAlpha', 0)
 view(2)
 title('Exact')
+xlabel('x')
+ylabel('t', 'Rotation', 0)
+colorbar
 
 figure
-plot(x, phi(end, :))
+plot(x, phi(end, :), 'LineWidth', 1.2)
 hold on
-plot(x, phi_exc(end, :))
+plot(x, phi_exc(end, :), 'LineWidth', 1.2)
 legend('Computed', 'Exact')
+title('Acoustic Potential at time t = T')
+ylabel('\phi(x)')
+xlabel('x')
+grid on
