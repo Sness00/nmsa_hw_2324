@@ -1,4 +1,4 @@
-function [S_int] = sections(x, n)
+function [S_int_p, S_int_u] = sections(x, n, dx)
 
 % vocal tract profile, non-dimensional [pos S] pairs
 % /E/
@@ -15,13 +15,18 @@ else
     S = S2;
 end
 
-S_int = zeros(size(x));
+S_int_p = zeros(size(x));
+S_int_u = zeros(size(x));
 
 for ii = 1:(length(S(:, 1))-1)
     m = (S(ii+1, 2) - S(ii, 2))/(S(ii+1, 1) - S(ii, 1));
     q = (S(ii+1, 1)*S(ii, 2) - S(ii, 1)*S(ii+1, 2))/(S(ii+1, 1) - S(ii, 1));
     ind1 = find(abs(x - S(ii, 1)) < 1e-6);
     ind2 = find(abs(x - S(ii+1, 1)) < 1e-6);
-    x_cut = x(ind1:ind2);
-    S_int(ind1:ind2) = m.*x_cut + q;
+    x_cut_p = x(ind1:ind2);
+    x_cut_u = x_cut_p - dx/2;
+    S_int_p(ind1:ind2) = m.*x_cut_p + q;
+    S_int_u(ind1:ind2) = m.*x_cut_u + q;
 end
+
+S_int_u = S_int_u(2:end);
