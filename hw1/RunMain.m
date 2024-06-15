@@ -39,13 +39,23 @@ Data.calc_errors = 1;
 [err5, sol5, fem5, D5] = Main(Data, 256);
 [err6, sol6, fem6, D6] = Main(Data, 512);
 
-%% Plot Errors
-close all
+%% Graphs
+
+if Data.visual_graph
+    PointwiseSol(fem1, sol1.uh, sol1.u_ex)
+    PointwiseSol(fem2, sol2.uh, sol2.u_ex)
+    PointwiseSol(fem3, sol3.uh, sol3.u_ex)
+    PointwiseSol(fem4, sol4.uh, sol4.u_ex)
+    PointwiseSol(fem5, sol5.uh, sol5.u_ex)
+    PointwiseSol(fem6, sol6.uh, sol6.u_ex)
+end
+
 hVec   = [fem1.h, fem2.h, fem3.h, fem4.h, fem5.h, fem6.h]; 
 eVecL2 = [err1.L2, err2.L2, err3.L2, err4.L2, err5.L2, err6.L2];
 figure
 loglog(hVec,hVec.^2,'-+b','Linewidth',2); hold on;
 loglog(hVec,eVecL2,'-or','Linewidth',2);
-legend(sprintf('h^%i',2),'||u-u_h||_{L^2}');
+legend('h^2','||u-u_h||_{L^2} ', 'Location', 'southeast');
 ylabel('L^2-error');
 xlabel('h');
+grid on

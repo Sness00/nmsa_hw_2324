@@ -90,11 +90,11 @@ elseif strcmp(TestName, 'test')
     Data.dt = 0.001;
     
     % Parameters
-    Data.ro = @(x) 1 + 3.*x; 
-    Data.mu = @(x) 4 + 2.*x;
+    Data.ro = @(x) 1 + 0.*x; 
+    Data.mu = @(x) 1 + 0.*x;
 
-    Data.ro_x = @(x) 3 + 0.*x;
-    Data.mu_x = @(x) 2 + 0.*x;
+    Data.ro_x = @(x) 0 + 0.*x;
+    Data.mu_x = @(x) 0 + 0.*x;
 
     Data.c = @(x) sqrt(Data.mu(x)./Data.ro(x));    
     

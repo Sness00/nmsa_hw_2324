@@ -20,8 +20,8 @@ if (abs(m - M) < 0.1)
 end
 
 figure;
-plot(femregion.coord(:,1),full(uh));
-title(''); xlabel('x-axis'); ylabel('y-axis');
+plot(femregion.coord(:, 1),full(uh));
+title(''); xlabel('x'); ylabel('y', 'Rotation', 0);
 
 hold on;
 plot(femregion.coord(:,1),u_ex,'r*');

@@ -25,7 +25,7 @@ m = -2; % min(uh);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figure(100)
 plot(femregion.coord(:,1),full(uh));
-title(['u_h(x,t) at time : ', num2str(t), ' s']); xlabel('x-axis'); ylabel('y-axis');
+title(['u_h(x, t) at time t =  ', num2str(t)]); xlabel('x'); ylabel('y', 'Rotation', 0);
 axis([x1,x2,m,M]); 
 grid on
 end

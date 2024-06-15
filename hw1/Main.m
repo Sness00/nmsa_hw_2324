@@ -13,6 +13,7 @@ function [Errors, Solutions, Femregion, Data] = Main(Data, nEl)
 %          Data        : (struct)  Data struct
 %
 
+clc
 fprintf('============================================================\n')
 fprintf(['Solving test ', Data.name, ' with ', num2str(nEl), ' elements \n']);
 
@@ -100,23 +101,19 @@ for t = Data.dt : Data.dt : Data.T
 end
 
 if Data.surf
-    [xx,tt] = meshgrid(0:Data.dt:Data.T, Femregion.coord);
+    [xx, tt] = meshgrid(0:Data.dt:Data.T, Femregion.coord);
     figure
     surf(xx, tt, u, 'EdgeColor', 'None');
-    xlabel('time'); ylabel('x'); zlabel('u(x,t)');
-    title('u_h in space and time')
+    xlabel('t'); ylabel('x', 'Rotation', 0);
+    title('u_h(x, t)')
     view(2)
+    colorbar
 end
 
-Solutions = [];
-Errors = [];
-
-if Data.visual_graph
-    [Solutions] = PostProcessing(Data, Femregion, u(:, end));
-end
-    
+[Solutions] = PostProcessing(Data, Femregion, u(:, end));
+Errors = [];    
 if (Data.calc_errors)
-        [Errors] = ComputeErrors(Data,Femregion,Solutions);
+        [Errors] = ComputeErrors(Data, Femregion, Solutions);
 end
 
 
