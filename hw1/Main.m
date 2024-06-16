@@ -110,7 +110,10 @@ if Data.surf
     colorbar
 end
 
-[Solutions] = PostProcessing(Data, Femregion, u(:, end));
+Solutions = [];
+if Data.visual_graph
+    [Solutions] = PostProcessing(Data, Femregion, u(:, end));
+end
 Errors = [];    
 if (Data.calc_errors)
         [Errors] = ComputeErrors(Data, Femregion, Solutions);

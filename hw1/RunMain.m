@@ -11,7 +11,7 @@ addpath FESpace
 addpath Postprocessing
 
 %% Data for Test
-Data = DataTest('Q3a');
+Data = DataTest('Q3b');
 
 % Options
 Data.surf = 1;
