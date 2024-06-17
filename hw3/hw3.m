@@ -6,7 +6,7 @@ close all
 
 %%
 
-N = 1000;
+N = 500;
 x = linspace(0,1,N+1);
 dx = x(2:end) - x(1:end-1);
 u_int = -1/(2*pi) * cos(2*pi*x);
@@ -15,7 +15,6 @@ figure(1);
 plot([x(1:end-1); x(2:end)], [u0; u0]);
 u = u0;
 
-
 dt = 0.01;
 T = 1;
 t_end = 0;
@@ -23,6 +22,8 @@ t_end = 0;
 uplot = NaN(N,T/dt);
 uplot(:,1) = u';
 j = 2;
+% fluxes = {'Constant', 'Upwind', 'Lax-Wendroff', 'Fromm'};
+% [ind, ~] = listdlg('ListString', fluxes, 'SelectionMode', 'single', 'PromptString', 'Select the Flux Reconstruction Scheme');
 
 for t = dt : dt : T
     % du/dt = f(t,u)
@@ -30,7 +31,7 @@ for t = dt : dt : T
     u = u(end,:);
     uplot(:,j) = u;
     plot([x(1:end-1); x(2:end)], [u;u], 'k');
-    ylim([-1.5,1.5]);
+    ylim([-1.5, 1.5]);
     xlabel('x'); ylabel('u(x,t)'); 
     t_end = t_end + dt;
     title(['Burgers equation at t = ', num2str(t_end)]);
@@ -42,10 +43,10 @@ figure(2)
 xplot = dx(1)/2:dx(1):1-dx(1)/2;
 tplot = 0:dt:T;
 surf(tplot,xplot,uplot,'EdgeColor','none')
-xlabel('t'); ylabel('x'); title('u(x,t)'); colorbar;
+xlabel('t'); ylabel('x', 'Rotation', 0); title('u(x,t)'); colorbar;
 view(2)
 
-function [dudt] = ddtFiniteVolume(t, u)
+function [dudt] = ddtFiniteVolume(~, u)
     N = length(u);
     x = linspace(0,1,N+1);
     dx = x(2:end) - x(1:end-1);
