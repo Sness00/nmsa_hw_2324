@@ -75,18 +75,21 @@ for j = 1:Nx
 end
 
 N = 2^ceil(log2(Nt+1));
+% N = Nt + 2;
 fs = 1/dt;
 U_in = fft(u_b(t_u), N).';
 U_out = fft(u(:, end), N);
 
 frf = abs(U_out./U_in);
 frf_norm_dB = 20*log10(frf(1:N/2)/max(frf));
+% frf_norm_dB = frf(1:N/2)/max(frf);
 freq = 0:fs/N:fs*(1-1/N);
 
 [xxp, ttp] = meshgrid(x_p, t_p);
 [xxu, ttu] = meshgrid(x_u, t_u);
 
 P_out = 20*log10(abs(fft(p(:, 1), N)));
+% P_out = (abs(fft(p(:, end), N)));
 
 %% Graphs
 

@@ -24,9 +24,47 @@ for ii = 1:(length(S(:, 1))-1)
     ind1 = find(abs(x - S(ii, 1)) < 1e-6);
     ind2 = find(abs(x - S(ii+1, 1)) < 1e-6);
     x_cut_p = x(ind1:ind2);
-    x_cut_u = x_cut_p - dx/2;
+    x_cut_u = x_cut_p + dx/2;
     S_int_p(ind1:ind2) = m.*x_cut_p + q;
     S_int_u(ind1:ind2) = m.*x_cut_u + q;
 end
 
-S_int_u = S_int_u(2:end);
+S_int_u = S_int_u(1:end-1);
+
+% figure
+% subplot(2, 1, 1)
+% plot(S1(:, 1), -sqrt(S1(:, 2)), 'k', S1(:, 1), sqrt(S1(:, 2)), 'k', 'LineWidth', 1.2)
+% xlabel('x')
+% ylabel('$\sqrt{S(x)}$', Interpreter='latex')
+% ylim([-2.2 2.2])
+% grid on
+% title('Vocal Tract Profile, "E" Sound')
+% subplot(2, 1, 2)
+% plot(S2(:, 1), -sqrt(S2(:, 2)), 'k', S2(:, 1), sqrt(S2(:, 2)), 'k', 'LineWidth', 1.2)
+% xlabel('x')
+% ylabel('$\sqrt{S(x)}$', Interpreter='latex')
+% grid on
+% ylim([-2.2 2.2])
+% title('Vocal Tract Profile, "A" Sound')
+% 
+% figure
+% subplot(2, 1, 1)
+% stem(x(101:131), S_int_p(101:131), 'Marker', '*', 'Color', '#EDB120', 'LineWidth', 1.2, 'MarkerSize', 8)
+% hold on
+% stem(x(101:131), -S_int_p(101:131), 'Marker', '*', 'Color', '#EDB120', 'LineWidth', 1.2, 'MarkerSize', 8)
+% hold on
+% plot(S(:, 1), -S(:, 2), S(:, 1), S(:, 2), 'LineWidth', 1.2, 'Color', 'black')
+% grid on
+% xlim([0.1 0.13])
+% xlabel('x')
+% ylabel('S(x)')
+% subplot(2, 1, 2)
+% stem(x(101:130)+dx/2, S_int_u(101:130), 'Marker', '*', 'Color', '#EDB120', 'LineWidth', 1.2, 'MarkerSize', 8)
+% hold on
+% stem(x(101:130)+dx/2, -S_int_u(101:130), 'Marker', '*', 'Color', '#EDB120', 'LineWidth', 1.2, 'MarkerSize', 8)
+% hold on
+% plot(S(:, 1), -S(:, 2), S(:, 1), S(:, 2), 'LineWidth', 1.2, 'Color', 'black')
+% grid on
+% xlim([0.1 0.13])
+% xlabel('x')
+% ylabel('S(x)')

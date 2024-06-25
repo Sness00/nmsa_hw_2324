@@ -38,8 +38,8 @@ f = @(x, t) gamma^2*S_x(x)*pi/2.*sin(pi*(x/2+1)).*sin(3*pi*t) - ...
 D = [0, L];
 T = 2;
 
-Nt = 2000;
-Nx = 1000;
+Nt = 6000;
+Nx = 2000;
 
 dt = T/Nt;
 dx = (D(2) - D(1))/Nx;
@@ -86,33 +86,21 @@ for j = 1:Nx
     u(Nt+1, j) = -gamma*S(x_u(j))*dt/dx*(p(Nt, j+1)-p(Nt, j)) + u(Nt, j);
 end
 
-u_exc = zeros(length(t_u), length(x_u));
-p_exc = zeros(length(t_p), length(x_p));
-for k = 1:Nt+1
-    for j = 1:Nx
-        u_exc(k, j) = u_ex(x_u(j), t_u(k));
-    end
-end
-for k = 1:Nt
-    for j = 1:Nx+1
-        p_exc(k, j) = p_ex(x_p(j), t_p(k));
-    end
-end
 [xxp, ttp] = meshgrid(x_p, t_p);
 [xxu, ttu] = meshgrid(x_u, t_u);
 
 %% Errors
 
-L2_err_p = norm(p_exc(end, :) - p(end, :), 2)*dx^0.5;
-L1_err_p = norm(p_exc(end, :) - p(end, :), 1)*dx;
-Linf_err_p = norm(p_exc(end, :) - p(end, :), Inf);
+L2_err_p = norm(p_ex(x_p, t_p(end)) - p(end, :), 2)*dx^0.5;
+L1_err_p = norm(p_ex(x_p, t_p(end)) - p(end, :), 1)*dx;
+Linf_err_p = norm(p_ex(x_p, t_p(end)) - p(end, :), Inf);
 
 disp('Discretization errors for pressure: ')
 disp([L2_err_p L1_err_p Linf_err_p])
 
-L2_err_u = norm(u_exc(end, :) - u(end, :), 2)*dx^0.5;
-L1_err_u = norm(u_exc(end, :) - u(end, :), 1)*dx;
-Linf_err_u = norm(u_exc(end, :) - u(end, :), Inf);
+L2_err_u = norm(u_ex(x_u, t_u(end)) - u(end, :), 2)*dx^0.5;
+L1_err_u = norm(u_ex(x_u, t_u(end)) - u(end, :), 1)*dx;
+Linf_err_u = norm(u_ex(x_u, t_u(end)) - u(end, :), Inf);
 
 disp('Discretization errors for velocity: ')
 disp([L2_err_u L1_err_u Linf_err_u])
@@ -120,46 +108,27 @@ disp([L2_err_u L1_err_u Linf_err_u])
 %% Graphs
 
 figure
-sgtitle('Pressure p(x, t)')
 subplot(1, 2, 1)
 surf(xxp, ttp, p, 'EdgeAlpha', 0)
 view(2)
-title('Computed')
+title('Pressure p(x, t)')
 xlabel('x')
 ylabel('t', 'Rotation', 0)
 colorbar
 subplot(1, 2, 2)
-surf(xxp, ttp, p_exc, 'EdgeAlpha', 0)
-view(2)
-title('Exact')
-xlabel('x')
-ylabel('t', 'Rotation', 0)
-colorbar
-
-figure
-sgtitle('Velocity u(x, t)')
-subplot(1, 2, 1)
 surf(xxu, ttu, u, 'EdgeAlpha', 0)
 view(2)
-title('Computed')
+title('Velocity u(x, t)')
 xlabel('x')
 ylabel('t', 'Rotation', 0)
 colorbar
-subplot(1, 2, 2)
-surf(xxu, ttu, u_exc, 'EdgeAlpha', 0)
-view(2)
-title('Exact')
-xlabel('x')
-ylabel('t', 'Rotation', 0)
-colorbar
-
 
 figure
 sgtitle('Pressure and Velocity at t = T')
 subplot(2, 1, 1)
 plot(x_p, p(end, :), 'LineWidth', 1.2)
 hold on
-plot(x_p, p_exc(end, :), 'LineWidth', 1.2)
+plot(x_p, p_ex(x_p, t_p(end)), 'LineWidth', 1.2)
 title('Pressure')
 xlabel('x')
 ylabel('p(x)')
@@ -168,10 +137,10 @@ grid on
 subplot(2, 1, 2)
 plot(x_u, u(end, :), 'LineWidth', 1.2)
 hold on
-plot(x_u, u_exc(end, :), 'LineWidth', 1.2)
+plot(x_u, u_ex(x_u, t_u(end)), 'LineWidth', 1.2)
 title('Velocity')
 xlabel('x')
 ylabel('u(x)')
 ylim([1.1*min(u(end, :)) 1.1*max(u(end, :))])
-legend('Computed', 'Exact', 'Location', 'southeast')
+legend('Computed', 'Exact', 'Location', 'northeast')
 grid on

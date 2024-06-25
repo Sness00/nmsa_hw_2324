@@ -38,8 +38,8 @@ f = @(x, t) gamma^2*S_x(x)*pi/2.*sin(pi*(x/2+1)).*sin(3*pi*t) - ...
 D = [0, L];
 T = 2;
 
-Nt = 2000;
-Nx = 1000;
+Nt = 5000;
+Nx = 500;
 
 dt = T/Nt;
 dx = (D(2) - D(1))/Nx;
@@ -87,18 +87,9 @@ disp([L2_err L1_err Linf_err])
 %% Graphs
 [xx, tt] = meshgrid(x, t);
 figure
-sgtitle('Acoustic Potential \phi(x, t)')
-subplot(1, 2, 1)
 surf(xx, tt, phi, 'EdgeAlpha', 0)
 view(2)
-title('Computed')
-xlabel('x')
-ylabel('t', 'Rotation', 0)
-colorbar
-subplot(1, 2, 2)
-surf(xx, tt, phi_exc, 'EdgeAlpha', 0)
-view(2)
-title('Exact')
+title('Acoustic Potential $\varphi(x, t)$', 'Interpreter', 'latex')
 xlabel('x')
 ylabel('t', 'Rotation', 0)
 colorbar
@@ -109,6 +100,6 @@ hold on
 plot(x, phi_exc(end, :), 'LineWidth', 1.2)
 legend('Computed', 'Exact')
 title('Acoustic Potential at time t = T')
-ylabel('\phi(x)')
+ylabel('$\varphi(x)$', 'Interpreter', 'latex')
 xlabel('x')
 grid on
