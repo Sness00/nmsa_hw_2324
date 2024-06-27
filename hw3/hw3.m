@@ -1,11 +1,9 @@
-% FINITE VOLUME - BURGER's EQUATION
-% CENTRAL FLUX 
 clc
 clear
 close all
 
 %%
-N = 1000;
+N = 500;
 x = linspace(0, 1, N+1);
 dx = x(2:end) - x(1:end-1);
 u_int = -1/(2*pi) * cos(2*pi*x);
@@ -13,25 +11,13 @@ u0 = (u_int(2:end)-u_int(1:end-1))./dx;
 u = u0;
 fluxes = {'Constant', 'Upwind', 'Lax-Wendroff', 'Fromm'};
 [ind, ~] = listdlg('ListString', fluxes, 'SelectionMode', 'single', 'PromptString', 'Flux Reconstruction Scheme');
-if ind == 1
-    u_minus = u;
-    u_plus = u;
-elseif ind == 2
-    u_minus = [u(1), u(2:end) + 0.5*(u(2:end) - u(1:end-1))];
-    u_plus = [u(1), u(2:end) - 0.5*(u(2:end) - u(1:end-1))];
-elseif ind == 3
-    u_minus = [u(1:end-1) + 0.5*(u(2:end) - u(1:end-1)), u(end)];
-    u_plus = [u(1:end-1) - 0.5*(u(2:end) - u(1:end-1)), u(end)];
-elseif ind == 4
-    u_minus = [u(1), u(2:end-1) + 0.25*(u(3:end) - u(1:end-2)), u(end)];
-    u_plus = [u(1), u(2:end-1) - 0.25*(u(3:end) - u(1:end-2)), u(end)];
-end
 figure(1);
-plot([x(1:end-1); x(2:end)], [u_minus; u_plus]);
+plot([x(1:end-1); x(2:end)], [u; u]);
+grid on
 figure(2);
-plot([x(1:end-1); x(2:end)], [u_minus; u_plus]);
-
-dt = 0.01;
+plot([x(1:end-1); x(2:end)], [u; u]);
+grid on
+dt = 0.005;
 T = 1;
 t_end = 0;
 
@@ -60,6 +46,7 @@ for t = dt : dt : T
     plot([x(1:end-1); x(2:end)], [u_minus; u_plus], 'k');
     ylim([-1.5, 1.5]);
     xlabel('x'); ylabel('u(x,t)'); 
+    grid on
     t_end = t_end + dt;
     title(['Burgers equation at t = ', num2str(t_end)]);
     drawnow;

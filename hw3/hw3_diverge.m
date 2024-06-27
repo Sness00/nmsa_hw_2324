@@ -1,31 +1,20 @@
+% FINITE VOLUME - BURGER's EQUATION
+% CENTRAL FLUX 
 clc
 clear
 close all
 
 %%
+
 N = 100;
 x = linspace(0, 1, N+1);
 dx = x(2:end) - x(1:end-1);
 u_int = -1/(2*pi) * cos(2*pi*x);
 u0 = (u_int(2:end)-u_int(1:end-1))./dx;
-u = u0;
-fluxes = {'Constant', 'Upwind', 'Lax-Wendroff', 'Fromm'};
-[ind, ~] = listdlg('ListString', fluxes, 'SelectionMode', 'single', 'PromptString', 'Flux Reconstruction Scheme');
-if ind == 1
-    handler = @ddtFiniteVolume;
-elseif ind == 2
-    handler = @ddtFiniteVolumeCorrectorUpwind;
-elseif ind == 3
-    handler = @ddtFiniteVolumeCorrectorLW;
-elseif ind == 4
-    handler = @ddtFiniteVolumeCorrectorFromm;
-end
 figure(1);
-plot([x(1:end-1); x(2:end)], [u; u]);
-grid on
-figure(2);
-plot([x(1:end-1); x(2:end)], [u; u]);
-grid on
+plot([x(1:end-1); x(2:end)], [u0; u0]);
+u = u0;
+
 dt = 0.01;
 T = 1;
 t_end = 0;
@@ -33,35 +22,45 @@ t_end = 0;
 uplot = NaN(N, T/dt);
 uplot(:, 1) = u';
 j = 2;
+fluxes = {'Constant', 'Upwind', 'Lax-Wendroff', 'Fromm'};
+% fluxes = {'Constant', 'Upwind'};
+[ind, ~] = listdlg('ListString', fluxes, 'SelectionMode', 'single', 'PromptString', 'Flux Reconstruction Scheme');
+
+if ind == 1
+    handle = @ddtFiniteVolumeConstant;
+elseif ind == 2
+    handle = @ddtFiniteVolumeUpwind;
+elseif ind == 3
+    handle = @ddtFiniteVolumeLW;
+else
+    handle = @ddtFiniteVolumeFromm;
+end
 
 for t = dt : dt : T
-    [~, u] = ode45(handler, [0, dt/2], u);
-    u = u(end, :);
-    [~, u] = ode45(handler, [0, dt/2], u);
-    u = u(end, :);
-    uplot(:, j) = u;
-    figure(2)
-    plot([x(1:end-1); x(2:end)], [u; u], 'k');
+    [~, u] = ode45(handle, [0, dt], u);
+    u = u(end,:);
+    uplot(:,j) = u;
+    plot([x(1:end-1); x(2:end)], [u;u], 'k');
     ylim([-1.5, 1.5]);
     xlabel('x'); ylabel('u(x,t)'); 
-    grid on
     t_end = t_end + dt;
     title(['Burgers equation at t = ', num2str(t_end)]);
     drawnow;
-    j = j + 1;
+    j = j + 1;    
 end
 
-figure
+figure(2)
 xplot = dx(1)/2:dx(1):1-dx(1)/2;
 tplot = 0:dt:T;
 surf(tplot, xplot, uplot,'EdgeColor','none')
 xlabel('t'); ylabel('x', 'Rotation', 0); title('u(x,t)'); colorbar;
 view(2)
 
-function [dudt] = ddtFiniteVolume(~, u)
+function [dudt] = ddtFiniteVolumeConstant(~, u)
     N = length(u); % cell number
     x = linspace(0, 1, N+1); % grid
     dx = x(2:end) - x(1:end-1); % cell length
+    % Constant Flux Reconstruction
     f = u.^2/2; % Flux    
     fL = f(1:end-1);
     fR = f(2:end);
@@ -71,7 +70,7 @@ function [dudt] = ddtFiniteVolume(~, u)
     dudt = (f_int(1:end-1) - f_int(2:end))./dx';
 end
 
-function [dudt] = ddtFiniteVolumeCorrectorUpwind(~, u)
+function [dudt] = ddtFiniteVolumeUpwind(~, u)
     N = length(u);
     x = linspace(0, 1, N+1);
     dx = x(2:end) - x(1:end-1);
@@ -85,7 +84,7 @@ function [dudt] = ddtFiniteVolumeCorrectorUpwind(~, u)
     dudt = (f_int(1:end-1) - f_int(2:end))./(dx)';
 end
 
-function [dudt] = ddtFiniteVolumeCorrectorLW(~, u)
+function [dudt] = ddtFiniteVolumeLW(~, u)
     N = length(u); % cell number
     x = linspace(0, 1, N+1); % grid
     dx = x(2:end) - x(1:end-1); % cell length
@@ -99,7 +98,7 @@ function [dudt] = ddtFiniteVolumeCorrectorLW(~, u)
     dudt = (f_int(1:end-1) - f_int(2:end))./dx';
 end
 
-function [dudt] = ddtFiniteVolumeCorrectorFromm(~, u)
+function [dudt] = ddtFiniteVolumeFromm(~, u)
     N = length(u); % cell number
     x = linspace(0, 1, N+1); % grid
     dx = x(2:end) - x(1:end-1); % cell length

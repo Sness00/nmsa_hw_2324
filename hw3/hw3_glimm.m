@@ -11,19 +11,9 @@ dx = x(2:end) - x(1:end-1);
 u_int = -1/(2*pi) * cos(2*pi*x);
 u0 = (u_int(2:end)-u_int(1:end-1))./dx;
 u = u0;
-if ind == 1
-    u_minus = u;
-    u_plus = u;
-elseif ind == 2
-    u_minus = [u(1), u(2:end) + 0.5*(u(2:end) - u(1:end-1))];
-    u_plus = [u(1), u(2:end) - 0.5*(u(2:end) - u(1:end-1))];
-elseif ind == 3
-    u_minus = [u(1:end-1) + 0.5*(u(2:end) - u(1:end-1)), u(end)];
-    u_plus = [u(1:end-1) - 0.5*(u(2:end) - u(1:end-1)), u(end)];
-elseif ind == 4
-    u_minus = [u(1), u(2:end-1) + 0.25*(u(3:end) - u(1:end-2)), u(end)];
-    u_plus = [u(1), u(2:end-1) - 0.25*(u(3:end) - u(1:end-2)), u(end)];
-end
+u_minus = u;
+u_plus = u;
+
 figure(1);
 plot([x(1:end-1); x(2:end)], [u_minus; u_plus]);
 figure(2);
@@ -38,22 +28,21 @@ uplot(:, 1) = u';
 j = 2;
 
 for t = dt : dt : T
-    [~, u] = ode45(@ddtFiniteVolume, [0, dt], u);
+    [~, u] = ode45(@ddtFiniteVolume, [0, dt/2], u);
     u = u(end,:);
-    if ind == 1
-        u_minus = u;
-        u_plus = u;
-    elseif ind == 2
-        u_minus = [u(1), u(2:end) + 0.5*(u(2:end) - u(1:end-1))];
-        u_plus = [u(1), u(2:end) - 0.5*(u(2:end) - u(1:end-1))];
-    elseif ind == 3
-        u_minus = [u(1:end-1) + 0.5*(u(2:end) - u(1:end-1)), u(end)];
-        u_plus = [u(1:end-1) - 0.5*(u(2:end) - u(1:end-1)), u(end)];
-    elseif ind == 4
-        u_minus = [u(1), u(2:end-1) + 0.25*(u(3:end) - u(1:end-2)), u(end)];
-        u_plus = [u(1), u(2:end-1) - 0.25*(u(3:end) - u(1:end-2)), u(end)];
-    end    
-    uplot(:, j) = u_minus;
+    u_minus = u;
+    u_plus = u; 
+    s1 = (u(1:end-1)+u(2:end))/2;
+    p1 = 0.5*(1 + s1.*dt./dx(1));
+    choice1 = rand(size(u(1:end-1)));
+    u_half = [u(1) u(1:end-1).*(choice1 > p1) + u(2:end).*(choice1 <= p1)];
+    [~, u_half] = ode45(@ddtFiniteVolume, [0, dt/2], u_half);
+    u_half = u_half(end, :);
+    s2 = (u_half(1:end-1)+u_half(2:end))/2;
+    p2 = 0.5*(1 + s2.*dt./dx(1));
+    choice2 = rand(size(u_half(1:end-1)));
+    u = [u_half(1) u_half(1:end-1).*(choice2 > p2) + u_half(2:end).*(choice2 <= p2)];
+    % uplot(:, j) = u_minus;
     figure(2)
     plot([x(1:end-1); x(2:end)], [u_minus; u_plus], 'k');
     ylim([-1.5, 1.5]);
@@ -64,12 +53,12 @@ for t = dt : dt : T
     j = j + 1;    
 end
 
-figure(2)
-xplot = dx(1)/2:dx(1):1-dx(1)/2;
-tplot = 0:dt:T;
-surf(tplot, xplot, uplot,'EdgeColor','none')
-xlabel('t'); ylabel('x', 'Rotation', 0); title('u(x,t)'); colorbar;
-view(2)
+% figure(2)
+% xplot = dx(1)/2:dx(1):1-dx(1)/2;
+% tplot = 0:dt:T;
+% surf(tplot, xplot, uplot,'EdgeColor','none')
+% xlabel('t'); ylabel('x', 'Rotation', 0); title('u(x,t)'); colorbar;
+% view(2)
 
 function [dudt] = ddtFiniteVolume(~, u)
     N = length(u); % cell number
