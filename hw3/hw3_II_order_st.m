@@ -32,9 +32,9 @@ uplot(:, 1) = u';
 j = 2;
 
 for t = dt : dt : T
-    [~, u] = ode45(handler, [0, dt/2], u);
-    u = u(end, :);
     [~, u] = ode45(@ddtFiniteVolume, [0, dt/2], u);
+    u = u(end, :);
+    [~, u] = ode45(handler, [0, dt/2], u);
     u = u(end, :);
     uplot(:, j) = u;
     figure(2)
